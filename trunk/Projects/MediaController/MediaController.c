@@ -83,6 +83,9 @@ void SetupHardware()
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
 
+    DDRB = 0;
+    PORTB = 0xFF;
+
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
 
@@ -146,15 +149,16 @@ bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDIn
 
 	uint8_t JoyStatus_LCL    = Joystick_GetStatus();
 	uint8_t ButtonStatus_LCL = Buttons_GetStatus();
+    MediaReport->Mute          = ((~PINB & (1 << PINB0)) ? true : false);
 
-	/* Update the Media Control report with the user button presses */
+	/* Update the Media Control report with the user button presses 
 	MediaReport->Mute          = ((ButtonStatus_LCL & BUTTONS_BUTTON1) ? true : false);
 	MediaReport->PlayPause     = ((JoyStatus_LCL & JOY_PRESS) ? true : false);
 	MediaReport->VolumeUp      = ((JoyStatus_LCL & JOY_UP)    ? true : false);
 	MediaReport->VolumeDown    = ((JoyStatus_LCL & JOY_DOWN)  ? true : false);
 	MediaReport->PreviousTrack = ((JoyStatus_LCL & JOY_LEFT)  ? true : false);
 	MediaReport->NextTrack     = ((JoyStatus_LCL & JOY_RIGHT) ? true : false);
-
+    */
 	*ReportSize = sizeof(USB_MediaReport_Data_t);
 	return false;
 }
