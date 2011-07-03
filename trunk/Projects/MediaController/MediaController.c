@@ -76,6 +76,18 @@ int main(void)
 	}
 }
 
+/** Reads gray code from a rotary encoder and returns its state. Possible states are:
+  * -1 (Counterclockwise), 0 (No movement), 1 (Clockwise)
+  */
+int8_t ReadEncoder() 
+{
+    static int8_t encoder_states[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
+    static uint8_t old_state = 0;
+    old_state <<= 2;
+    old_state |= (PIND & 0x03 );
+    return ( encoder_states[(old_state & 0x0F)]); 
+}
+
 /** Configures the board hardware and chip peripherals for the demo's functionality. */
 void SetupHardware()
 {
@@ -83,8 +95,15 @@ void SetupHardware()
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
 
-    DDRB = 0;
+    /* Setup port B for input. Sets pins B0 for input */
+    DDRB = 0x01; 
+    /* Pull all port B pins LOW */
     PORTB = 0xFF;
+
+    /* Setup port C for rotary encoder input. Set pins C0, C1 for input */
+    DDRD = 0x03;
+    /* Pull port C pins HIGH */
+    PORTD = 0x03;
 
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
@@ -149,8 +168,11 @@ bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDIn
 
 	uint8_t JoyStatus_LCL    = Joystick_GetStatus();
 	uint8_t ButtonStatus_LCL = Buttons_GetStatus();
-    MediaReport->Mute          = ((~PINB & (1 << PINB0)) ? true : false);
+    int8_t EncoderStatus = ReadEncoder();
 
+    MediaReport->Mute          = ((~PINB & (1 << PINB0)) ? true : false);
+    MediaReport->VolumeUp      = ((EncoderStatus == 1)    ? true : false);
+	MediaReport->VolumeDown    = ((EncoderStatus == -1)  ? true : false);
 	/* Update the Media Control report with the user button presses 
 	MediaReport->Mute          = ((ButtonStatus_LCL & BUTTONS_BUTTON1) ? true : false);
 	MediaReport->PlayPause     = ((JoyStatus_LCL & JOY_PRESS) ? true : false);
