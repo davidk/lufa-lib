@@ -78,6 +78,8 @@ int main(void)
 
 /** Reads gray code from a rotary encoder and returns its state. Possible states are:
   * -1 (Counterclockwise), 0 (No movement), 1 (Clockwise)
+  * Thanks to http://www.circuitsathome.com/mcu/reading-rotary-encoder-on-arduino
+  * for this incredibly elegant way of reading gray code rotary encoders.
   */
 int8_t ReadEncoder() 
 {
