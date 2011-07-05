@@ -98,14 +98,12 @@ void SetupHardware()
 	wdt_disable();
 
     /* Setup port B for input. Sets pins B0 for input */
-    DDRB = 0x01; 
-    /* Pull all port B pins LOW */
-    PORTB = 0xFF;
+    DDRB = (1 << DDB0); 
+    PORTB = (1 << PB0);
 
     /* Setup port C for rotary encoder input. Set pins C0, C1 for input */
-    DDRD = 0x03;
-    /* Pull port C pins HIGH */
-    PORTD = 0x03;
+    DDRD = (1 << DDD0)|(1 << DDD1);
+    PORTD = (1 << PD0)|(1 << PD1);
 
 	/* Disable clock division */
 	clock_prescale_set(clock_div_1);
