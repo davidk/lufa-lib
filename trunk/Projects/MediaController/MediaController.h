@@ -105,6 +105,6 @@
 		                                          const uint8_t ReportType,
 		                                          const void* ReportData,
 		                                          const uint16_t ReportSize);
-
+        int8_t ReadEncoder();
 #endif
 
