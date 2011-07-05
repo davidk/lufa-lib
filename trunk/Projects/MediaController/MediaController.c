@@ -66,7 +66,6 @@ int main(void)
 {
 	SetupHardware();
 
-	LEDs_SetAllLEDs(LEDMASK_USB_NOTREADY);
 	sei();
 
 	for (;;)
@@ -97,11 +96,11 @@ void SetupHardware()
 	MCUSR &= ~(1 << WDRF);
 	wdt_disable();
 
-    /* Setup port B for input. Sets pins B0 for input */
+    /* Setup port B for encoder SPST input. */
     DDRB = (1 << DDB0); 
     PORTB = (1 << PB0);
 
-    /* Setup port C for rotary encoder input. Set pins C0, C1 for input */
+    /* Setup port D for rotary encoder input */
     DDRD = (1 << DDD0)|(1 << DDD1);
     PORTD = (1 << PD0)|(1 << PD1);
 
@@ -109,9 +108,6 @@ void SetupHardware()
 	clock_prescale_set(clock_div_1);
 
 	/* Hardware Initialization */
-	Joystick_Init();
-	LEDs_Init();
-	Buttons_Init();
 	USB_Init();
 }
 
@@ -166,8 +162,6 @@ bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDIn
 {
 	USB_MediaReport_Data_t* MediaReport = (USB_MediaReport_Data_t*)ReportData;
 
-	uint8_t JoyStatus_LCL    = Joystick_GetStatus();
-	uint8_t ButtonStatus_LCL = Buttons_GetStatus();
     int8_t EncoderStatus = ReadEncoder();
 
     MediaReport->Mute          = ((~PINB & (1 << PINB0)) ? true : false);
