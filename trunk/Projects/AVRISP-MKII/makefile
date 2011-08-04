@@ -60,7 +60,7 @@
 
 
 # MCU name
-MCU = at90usb162
+MCU = atmega32u4
 
 
 # Target architecture (see library "Board Types" documentation).
@@ -70,7 +70,7 @@ ARCH = AVR8
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
 # LUFA board drivers). If USER is selected, put custom board drivers in a directory called
 # "Board" inside the application directory.
-BOARD = USBTINYMKII
+BOARD = BOARD_ADAFRUITU4
 
 
 # Processor frequency.
@@ -137,12 +137,12 @@ LUFA_OPTS += -D AUX_LINE_DDR=DDRB
 LUFA_OPTS += -D AUX_LINE_MASK="(1 << 4)"
 LUFA_OPTS += -D ENABLE_ISP_PROTOCOL
 LUFA_OPTS += -D ENABLE_XPROG_PROTOCOL
-LUFA_OPTS += -D VTARGET_ADC_CHANNEL=2
+LUFA_OPTS += -D VTARGET_ADC_CHANNEL=10
 LUFA_OPTS += -D VTARGET_REF_VOLTS=5
 LUFA_OPTS += -D VTARGET_SCALE_FACTOR=1
 #LUFA_OPTS += -D VTARGET_USE_INTERNAL_REF
 #LUFA_OPTS += -D NO_VTARGET_DETECT
-#LUFA_OPTS += -D LIBUSB_DRIVER_COMPAT
+LUFA_OPTS += -D LIBUSB_DRIVER_COMPAT
 #LUFA_OPTS += -D XCK_RESCUE_CLOCK_ENABLE
 #LUFA_OPTS += -D INVERTED_ISP_MISO
 #LUFA_OPTS += -D FIRMWARE_VERSION_MINOR=0x11
@@ -370,10 +370,10 @@ LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
 # Type: avrdude -c ?
 # to get a full listing.
 #
-AVRDUDE_PROGRAMMER = jtagmkII
+AVRDUDE_PROGRAMMER = avr109
 
 # com1 = serial port. Use lpt1 to connect to parallel port.
-AVRDUDE_PORT = usb
+AVRDUDE_PORT = /dev/ttyACM0
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep
