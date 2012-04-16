@@ -70,7 +70,7 @@ ARCH = AVR8
 # Target board (see library "Board Types" documentation, NONE for projects not requiring
 # LUFA board drivers). If USER is selected, put custom board drivers in a directory called
 # "Board" inside the application directory.
-BOARD = BOARD_ADAFRUITU4
+BOARD = ADAFRUITU4
 
 
 # Processor frequency.
@@ -144,8 +144,6 @@ LUFA_OPTS += -D VTARGET_SCALE_FACTOR=1
 #LUFA_OPTS += -D NO_VTARGET_DETECT
 LUFA_OPTS += -D LIBUSB_DRIVER_COMPAT
 #LUFA_OPTS += -D XCK_RESCUE_CLOCK_ENABLE
-#LUFA_OPTS += -D INVERTED_ISP_MISO
-#LUFA_OPTS += -D FIRMWARE_VERSION_MINOR=0x11
 
 
 # Create the LUFA source path variables by including the LUFA root makefile
@@ -723,10 +721,8 @@ clean_list :
 	$(REMOVEDIR) .dep
 
 doxygen:
-	@echo Generating Project Documentation \($(TARGET)\)...
-	@if ( doxygen Doxygen.conf 2>&1 | grep -v "warning: ignoring unsupported tag" ;); then \
-	  exit 1; \
-	fi;
+	@echo Generating Project Documentation...
+	@doxygen Doxygen.conf
 	@echo Documentation Generation Complete.
 
 clean_doxygen:
